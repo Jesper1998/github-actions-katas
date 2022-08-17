@@ -30,8 +30,8 @@ jobs:
       - name: Upload Compiled code
         uses: actions/upload-artifact@v2
         with: 
-          name: code
-          path: .
+          name: Jar
+          path: app/build/libs/app-0.1-all.jar
   Test:
     runs-on: ubuntu-latest
     container: gradle:6-jdk11
@@ -44,20 +44,39 @@ jobs:
           path: .
       - name: Test
         run: chmod +x ci/unit-test-app.sh && ci/unit-test-app.sh
-  Docker_image:
+  Docker_image_v1:
     runs-on: ubuntu-latest
     needs: [Build, Test]
     steps:
+      - name: retrive Repo
+        uses: actions/download-artifact@v2
+        with: 
+          name: Jar
+          path: app/build/libs/app-0.1-all.jar
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
           username: ${{ env.docker_username }}
           password: ${{ env.docker_password }}
+      - name: Setup
+        run: echo GIT_COMMIT=${GIT_COMMIT::8} >> $GITHUB_ENV
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: $docker_username/micronaut-app:1.0-${GIT_COMMIT::8} 
+          tags: ${{ env.docker_username }}/micronaut-app:1.0-${{ env.GIT_COMMIT }}
+  Docker_image_v2:
+    runs-on: ubuntu-latest
+    container: gradle:6-jdk11
+      - name: retrive build
+        uses: actions/download-artifact@v2
+        with: 
+          name: code
+          path: .
+      - name: build docker
+         run: chmod +x ci/build-docker.sh && ci/build-docker.sh
+      - name: push docker
+        run: chmod +x ci/push-docker.sh && ci/push-docker.sh
 
 
 
