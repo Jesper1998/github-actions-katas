@@ -1,7 +1,7 @@
 name: JAVA CI
 on: push
 jobs:
-  clone:
+  Clone:
     runs-on: ubuntu-latest
     steps:
       - name: clone-down
@@ -11,10 +11,10 @@ jobs:
         with: 
           name: code
           path: .
-  build:
+  Build:
     runs-on: ubuntu-latest
     container: gradle:6-jdk11
-    needs: [clone]
+    needs: [Clone]
     steps:
       - name: retrive Repo
         uses: actions/download-artifact@v2
@@ -23,10 +23,15 @@ jobs:
           path: .
       - name: Build with gradle
         run: chmod +x ci/build-app.sh && ci/build-app.sh
+    - name: Upload Compiled code
+        uses: actions/upload-artifact@v2
+        with: 
+          name: compiled_build
+          path: app/build/libs/app-0.1-all.jar
   Test:
     runs-on: ubuntu-latest
     container: gradle:6-jdk11
-    needs: [clone]
+    needs: [Clone]
     steps:
       - name: retrive Repo
         uses: actions/download-artifact@v2
@@ -35,5 +40,23 @@ jobs:
           path: .
       - name: Test
         run: chmod +x ci/unit-test-app.sh && ci/unit-test-app.sh
+  Docker_image:
+    env:
+      docker_username: ${{ secrets.DOCKER_USERNAME }}
+      docker_password: ${{ secrets.DOCKER_PASSWORD }}
+    runs-on: ubuntu-latest
+    needs: [Build, Test]
+    steps:
+      - name: retrive build
+        uses: actions/download-artifact@v2
+        with: 
+          name: compiled_build
+          path: app/build/libs/app-0.1-all.jar
+      - name: build docker
+        run: chmod +x ci/build-docker.sh && ci/build-docker.sh
+      - name: push docker
+        run: chmod +x ci/push-docker.sh && ci/push-docker.sh
+
+
 
         
