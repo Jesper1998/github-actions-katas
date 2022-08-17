@@ -1,5 +1,9 @@
 name: JAVA CI
 on: push
+env:
+  docker_username: ${{ secrets.DOCKER_USERNAME }}
+  docker_password: ${{ secrets.DOCKER_PASSWORD }}
+  GIT_COMMIT: ${{ github.sha }}
 jobs:
   Clone:
     runs-on: ubuntu-latest
@@ -41,9 +45,6 @@ jobs:
       - name: Test
         run: chmod +x ci/unit-test-app.sh && ci/unit-test-app.sh
   Docker_image:
-    env:
-      docker_username: ${{ secrets.DOCKER_USERNAME }}
-      docker_password: ${{ secrets.DOCKER_PASSWORD }}
     runs-on: ubuntu-latest
     needs: [Build, Test]
     steps:
