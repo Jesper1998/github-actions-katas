@@ -18,6 +18,9 @@ jobs:
     steps:
       - name: retrive Repo
         run: actions/download-artifact@v2
+        with: 
+          name: code
+          path: .
       - name: Build with gradle
         run: ci/build-app.sh
       - name: Test
