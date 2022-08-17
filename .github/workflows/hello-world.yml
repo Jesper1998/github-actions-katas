@@ -9,5 +9,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container: gradle:6-jdk11
+    steps:
       - name: Build_with_gradle
         run: ci/build-app.sh
