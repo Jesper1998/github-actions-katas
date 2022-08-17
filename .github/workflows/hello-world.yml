@@ -67,7 +67,6 @@ jobs:
           tags: ${{ env.docker_username }}/micronaut-app:1.0-${{ env.GIT_COMMIT }}
   Docker_image_v2:
     runs-on: ubuntu-latest
-    container: gradle:6-jdk11
     steps:
       - name: retrive build
         uses: actions/download-artifact@v2
@@ -75,7 +74,7 @@ jobs:
           name: code
           path: .
       - name: build docker
-         run: chmod +x ci/build-docker.sh && ci/build-docker.sh
+        run: chmod +x ci/build-docker.sh && ci/build-docker.sh
       - name: push docker
         run: chmod +x ci/push-docker.sh && ci/push-docker.sh
 
