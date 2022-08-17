@@ -26,8 +26,8 @@ jobs:
       - name: Upload Compiled code
         uses: actions/upload-artifact@v2
         with: 
-          name: compiled_build
-          path: app/build/libs/app-0.1-all.jar
+          name: code
+          path: .
   Test:
     runs-on: ubuntu-latest
     container: gradle:6-jdk11
@@ -50,8 +50,8 @@ jobs:
       - name: retrive build
         uses: actions/download-artifact@v2
         with: 
-          name: compiled_build
-          path: app/build/libs/app-0.1-all.jar
+          name: code
+          path: .
       - name: build docker
         run: chmod +x ci/build-docker.sh && ci/build-docker.sh
       - name: push docker
