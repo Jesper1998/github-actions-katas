@@ -32,6 +32,11 @@ jobs:
         with: 
           name: Jar
           path: app/build/libs/app-0.1-all.jar
+      - name: Upload Repo
+        uses: actions/upload-artifact@v2
+        with: 
+          name: code
+          path: .
   Test:
     runs-on: ubuntu-latest
     container: gradle:6-jdk11
