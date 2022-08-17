@@ -28,6 +28,11 @@ jobs:
     container: gradle:6-jdk11
     needs: [clone]
     steps:
+      - name: retrive Repo
+        uses: actions/download-artifact@v2
+        with: 
+          name: code
+          path: .
       - name: Test
         run: chmod +x ci/unit-test-app.sh && ci/unit-test-app.sh
 
