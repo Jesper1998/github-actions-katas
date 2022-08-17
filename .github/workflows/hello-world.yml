@@ -1,11 +1,13 @@
 name: Build
 on: push
 jobs:
-  clone-down:
+  clone:
+    runs-on: ubuntu-latest
+    steps:
+      - name: clone-down
+        uses: actions/checkout@v2
+  build:
     runs-on: ubuntu-latest
     container: gradle:6-jdk11
-    steps:
-      - name: clone
-        uses: actions/checkout@v2
-      - name: Build
+      - name: Build with gradle
         run: ci/build-app.sh
