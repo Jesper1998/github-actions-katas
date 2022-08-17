@@ -35,7 +35,7 @@ jobs:
       - name: Upload Repo
         uses: actions/upload-artifact@v2
         with: 
-          name: Code
+          name: code
           path: .
       - name: Upload Dockerfile
         uses: actions/upload-artifact@v2
