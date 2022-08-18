@@ -113,7 +113,7 @@ jobs:
       - name: Execute component test
         run: chmod +x ci/component-test.sh && GIT_COMMIT="GA-$GITHUB_SHA" && ci/component-test.sh
   Performance-test:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted]
     needs: [Docker_image_v1]
     steps:
       - name: retrive build
